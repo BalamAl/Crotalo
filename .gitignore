@@ -1,0 +1,4 @@
+# Codigo compilado
+build/
+# Locacion del WAR
+dist/

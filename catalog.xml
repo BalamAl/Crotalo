@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+    <system systemId="http://100.127.3.13:8080/Remedy/rcontrol/services/remedy/generic/RemedyService?wsdl" uri="src/conf/xml-resources/web-service-references/RemedyService/wsdl/100.127.3.13_8080/Remedy/rcontrol/services/remedy/generic/RemedyService.wsdl"/>
+    <system systemId="http://100.127.3.13:8080/Remedy/rcontrol/services/remedy/generic/RemedyService?wsdl=1" uri="src/conf/xml-resources/web-service-references/RemedyService/wsdl/100.127.3.13_8080/Remedy/rcontrol/services/remedy/generic/RemedyService.wsdl_1.wsdl"/>
+    <system systemId="http://100.127.3.13:8080/Remedy/rcontrol/services/remedy/generic/RemedyService?xsd=1" uri="src/conf/xml-resources/web-service-references/RemedyService/wsdl/100.127.3.13_8080/Remedy/rcontrol/services/remedy/generic/RemedyService.xsd_1.xsd"/>
+    <system systemId="http://100.127.3.13:8080/Remedy/rcontrol/services/remedy/generic/RemedyService?xsd=2" uri="src/conf/xml-resources/web-service-references/RemedyService/wsdl/100.127.3.13_8080/Remedy/rcontrol/services/remedy/generic/RemedyService.xsd_2.xsd"/>
+    <system systemId="http://100.127.3.13:8080/Remedy/rcontrol/services/remedy/generic/RemedyService?xsd=3" uri="src/conf/xml-resources/web-service-references/RemedyService/wsdl/100.127.3.13_8080/Remedy/rcontrol/services/remedy/generic/RemedyService.xsd_3.xsd"/>
+    <system systemId="http://100.127.3.13:8080/Remedy/rcontrol/services/generic/Select?wsdl" uri="src/conf/xml-resources/web-service-references/Select/wsdl/100.127.3.13_8080/Remedy/rcontrol/services/generic/Select.wsdl"/>
+    <system systemId="http://100.127.3.13:8080/SiacPuenteWS/WS_SIAC?wsdl" uri="src/conf/xml-resources/web-service-references/WS_SIAC/wsdl/100.127.3.13_8080/SiacPuenteWS/WS_SIAC.wsdl"/>
+    <system systemId="http://100.127.3.13:8080/SiacPuenteWS/WS_SIAC?xsd=1" uri="src/conf/xml-resources/web-service-references/WS_SIAC/wsdl/100.127.3.13_8080/SiacPuenteWS/WS_SIAC.xsd_1.xsd"/>
+</catalog>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context path="/Crotalo_DEV">
+  <Listener className="org.apache.catalina.startup.TldConfig"/>
+  <Resourcelink auth="Container" driverClassName="oracle.jdbc.OracleDriver" logAbandoned="true" maxActive="50" maxIdle="10" maxWait="5000" minEvictableIdleTimeMillis="30000" name="jdbc/Crotalo_Pool" password="Temp.123" removeAbandoned="true" removeAbandonedTimeout="60" testOnBorrow="true" testWhileIdle="true" timeBetweenEvictionRunsMillis="5000" type="javax.sql.DataSource" url="jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=100.127.3.15)(PORT=1521)))(CONNECT_DATA=(SERVICE_NAME=ARS81)))" username="remedy" validationInterval="30000" validationQuery="select 1 from dual"/>
+</Context>
