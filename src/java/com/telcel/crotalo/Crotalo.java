@@ -8,11 +8,6 @@ package com.telcel.crotalo;
 import com.telcel.crotalo.utilities.WsRControl;
 import org.apache.log4j.Logger;
 
-/**
- *
- * @author iHector
- * @updated KC
- */
 public class Crotalo extends CrotaloEntities{
 
     public static final Logger log = Logger.getLogger(Crotalo.class);
@@ -25,24 +20,22 @@ public class Crotalo extends CrotaloEntities{
             procesosCrotalo = new CrotaloProcesos();
         //    log.info("Primera consulta...");
             StringBuilder querySelectCRQ = new StringBuilder();
-        /*    querySelectCRQ.append("&cForma=CHG:Infrastructure Change");
-            querySelectCRQ.append("&cColumnas=1");
-            querySelectCRQ.append("&cCondiciones=");
-            querySelectCRQ.append("'7'='7' ");
-            querySelectCRQ.append("'536870913'='(0,1,2,3)' ");*/
-        ///////////////////////////////////////////////////////////////////
-            querySelectCRQ.append("formulario/CHG:Infrastructure Change/");
-            querySelectCRQ.append("campos/1/");
-            querySelectCRQ.append("condiciones/'7'='7' ");
-        ///////////////////////////////////////////////////////////////////
-            querySelectCRQ.append("'536870913'='2' ");
-            querySelectCRQ.append("'1000000001'='TELCEL' ");
-            querySelectCRQ.append("'1000001270'='SOFTWARE' ");
-            querySelectCRQ.append("'1000001271'='APLICACION' ");
-            querySelectCRQ.append("'1000001272'='RCONTROL' ");
-            querySelectCRQ.append("'1000002268'='CROTALO' ");
-            querySelectCRQ.append("'1000000015'='CORP-OPMA-ORDENES DE TRABAJO MSC' ");
-            querySelectCRQ.append("'1000000568'='6000'");
+
+            querySelectCRQ.append("CHG:Infrastructure Change/");
+            querySelectCRQ.append("?fields=values(1)");
+            //TODO: cambiar 0 por 7 al finalizar
+            querySelectCRQ.append("&q='7'=\"0\" "); //status = Implementation In Progress
+            querySelectCRQ.append("AND'536870913'=\"2\" "); // Tipo Crotalo__c = 0=Individual, 1=Regional, 2=Multiple, 3=Nacional
+            querySelectCRQ.append("AND'1000000001'=\"TELCEL\" "); // Location Company
+            querySelectCRQ.append("AND'1000001270'=\"SOFTWARE\" "); // Product Cat Tier 1(2)
+            querySelectCRQ.append("AND'1000001271'=\"APLICACION\" "); // Product Cat Tier 2 (2)
+            querySelectCRQ.append("AND'1000001272'=\"RCONTROL\" "); // Product Cat Tier 3 (2)
+            querySelectCRQ.append("AND'1000002268'=\"CROTALO\" "); // Product Name (2)
+            querySelectCRQ.append("AND'1000000015'=\"CORP-OPMA-ORDENES DE TRABAJO MSC\" "); // Support Group Name
+            querySelectCRQ.append("AND'1000000568'=\"6000\""); // Change Timing
+
+
+
             procesosCrotalo.datosCRQ(WS_RC.CRQ_CROTALO(querySelectCRQ.toString()));
                                             //primeraconsulta(1)
                     //Entra a datosCRQ(2)     

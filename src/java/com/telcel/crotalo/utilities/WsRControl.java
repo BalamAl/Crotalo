@@ -20,6 +20,8 @@ import java.util.Properties;
 //import java.util.logging.Level;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+
+import com.telcel.crotalo.service.Token;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -147,7 +149,7 @@ public class WsRControl extends Thread {
         try {
 //            URL urlRemedy = new URL("http://10.191.205.236:8081/RemedyControl/rest/insert/");
             URL urlRemedy = new URL(prop.getProperty("URL_INSERT"));
-            urlParametros = userWs + columnas;
+            urlParametros =  columnas;
             
             OkHttpClient client = new OkHttpClient().newBuilder().build();
             MediaType mediaType = MediaType.parse("text/plain");
@@ -231,7 +233,7 @@ public class WsRControl extends Thread {
         boolean datosOk = false;
         try {
             String urlRemedy = prop.getProperty("URL_SELECT");
-            urlParametros = userWs + columna;
+            urlParametros = columna;
             System.out.println("urlParametros: "+urlParametros);
             OkHttpClient client = new OkHttpClient().newBuilder().build();
             Request request = new Request.Builder().url(urlRemedy + urlParametros).build();
@@ -282,7 +284,7 @@ public class WsRControl extends Thread {
     public List<String> queryCRQMulti(String columna) {
         ListCRQMultiple = new ArrayList<>();
         try {
-            urlParametros = userWs + columna;
+            urlParametros = columna;
             URL urlRemedy = new URL(prop.getProperty("URL_SELECT"));
 
             OkHttpClient client = new OkHttpClient().newBuilder().build();
@@ -334,7 +336,7 @@ public class WsRControl extends Thread {
 
         try {
             URL urlRemedy = new URL(prop.getProperty("URL_SELECT"));
-            urlParametros = userWs + query;
+            urlParametros =   query;
 /*            URLConnection conn = urlRemedy.openConnection();
             conn.setDoOutput(true);
             BufferedReader reader;
@@ -401,63 +403,86 @@ public class WsRControl extends Thread {
      */
     public List<String> CRQ_CROTALO(String columna) {
 
-        ListOfValues = new ArrayList<>();
-        String[] split;
-        String servicio;
+        List<String> listOfValues = new ArrayList<>();
+
         try {
-            urlParametros = userWs + columna;
-            URL urlRemedy = new URL(prop.getProperty("URL_SELECT"));
-            
-            OkHttpClient client = new OkHttpClient().newBuilder().build();
-            MediaType mediaType = MediaType.parse("application/json");
-            okhttp3.RequestBody body = okhttp3.RequestBody.create(mediaType, "");
-            
-            Request request = new Request.Builder().url(urlRemedy + urlParametros).build();
-            Response response = client.newCall(request).execute();
+            // Generar token
+            Token tokenGenerado = new Token();
+            tokenGenerado.Generar_token();
+            String token = tokenGenerado.getToken();
+            System.out.println("Token: " + token);
 
-            String Json = response.body().string();
-            Gson gson = new Gson();
-            JsonObject gsonobject = gson.fromJson(Json, JsonObject.class);
-            JsonElement data = gsonobject.get("entries");
-            String objectjson = data.toString().replace("[", "").replace("]", "");
-
-            split = objectjson.split(",");
-            String valor;
-            for (String split1 : split) {
-                if (split1.contains("values\":{")) {
-                    valor = split1.replace("{\"values\":{\"Request ID\":\"", "").replace("\"}", "");
-                    ListOfValues.add(valor);
-                }
+            if (token == null || token.isEmpty()) {
+                System.out.println("Error: El token no se pudo generar.");
+                return listOfValues;
             }
-            System.out.println("\n\nLISTA CRQ_CROTALO: "+ ListOfValues);
-//            OkHttpClient client = new OkHttpClient().newBuilder().build();
-//            MediaType mediaType = MediaType.parse("text/plain");
-//            RequestBody body = RequestBody.create(mediaType, "");
-//            Request request = new Request.Builder().url(servicio + urlParametros).build();
-//            Response response = client.newCall(request).execute();
-//            
-//            String Json = response.body().string();
-//            
-//            split = Json.split(",");
-//            int cont=0;
-//            for (String linea : split){
-//                System.out.println(linea);
-//                if (linea.contains("Request ID")) {
-//                    resultadoConsulta = Json.substring(Json.indexOf("Request ID")+13, Json.indexOf("\"},"));
-//                    ListOfValues.add(resultadoConsulta);
-//                    cont++;
-//                }
-//                else System.out.println("consulta vacía\n");
-//            }log.info("Total de CRQs: " + cont);
-            
-//            reader.close();
-        } catch (IOException exc) {
-            log.error("ERROR CRQ_CROTALO: " + exc);
-            log.error("PARAMS: " + urlParametros);
-            exc.printStackTrace();
+
+            String baseUrl = prop.getProperty("URL_SELECT");
+            String fullUrl = baseUrl + columna;
+            System.out.println("URL generada: " + fullUrl);
+
+            OkHttpClient client = new OkHttpClient().newBuilder().build();
+            MediaType mediaType = MediaType.parse("text/plain");
+            RequestBody body = RequestBody.create(mediaType, "");
+            Request request = new Request.Builder()
+                    .url(fullUrl)
+                    .method("GET", null)
+                    .addHeader("Authorization", "AR-JWT " + token)
+                    .build();
+
+            try (Response response = client.newCall(request).execute()) {
+                System.out.println("Response Code: " + response.code());
+
+                // Verificar si la respuesta es exitosa
+                if (!response.isSuccessful()) {
+                    System.out.println("Error: Respuesta no exitosa.");
+                    return listOfValues;
+                }
+
+                String jsonResponse = response.body().string();
+                System.out.println("Respuesta JSON de Remedy: " + jsonResponse);
+
+                // Procesar la respuesta JSON
+                Gson gson = new Gson();
+                JsonElement jsonElement = gson.fromJson(jsonResponse, JsonElement.class);
+
+                if (!jsonElement.isJsonObject()) {
+                    System.out.println("Error: La API devolvió un formato inesperado.");
+                    return listOfValues;
+                }
+
+                JsonObject jsonObject = jsonElement.getAsJsonObject();
+                JsonArray entries = jsonObject.getAsJsonArray("entries");
+
+                if (entries == null || entries.size() == 0) {
+                    System.out.println("Error: No se encontraron datos en 'entries'.");
+                    return listOfValues;
+                }
+
+                // Extraer valores
+                for (JsonElement entryElement : entries) {
+                    JsonObject entryObject = entryElement.getAsJsonObject();
+                    JsonObject values = entryObject.getAsJsonObject("values");
+
+                    if (values.has("Request ID")) {
+                        String requestId = values.get("Request ID").getAsString();
+                        listOfValues.add(requestId);
+                    }
+                }
+
+                System.out.println("\n\nLISTA CRQ_CROTALO: " + listOfValues);
+
+            } catch (IOException e) {
+                System.err.println("ERROR en la solicitud HTTP: " + e.getMessage());
+                e.printStackTrace();
+            }
+
+        } catch (Exception e) {
+            System.err.println("ERROR CRQ_CROTALO: " + e.getMessage());
+            e.printStackTrace();
         }
-    //    log.debug(ListOfValues);
-        return ListOfValues;
+
+        return listOfValues;
     }
 
     /**
@@ -486,7 +511,7 @@ public class WsRControl extends Thread {
 */
         try {
             URL urlRemedy = new URL(prop.getProperty("URL_SELECT"));
-            urlParametros = userWs + querySelectCRQValues;
+            urlParametros = querySelectCRQValues.toString();
 //            System.out.println("PARAMS CRQ VALUES: "+urlParametros);
             OkHttpClient client = new OkHttpClient().newBuilder().build();
             
@@ -741,7 +766,7 @@ public class WsRControl extends Thread {
 */
         try {
             URL urlRemedy = new URL(prop.getProperty("URL_SELECT"));
-            urlParametros = userWs + querySelectCRQValues.toString();
+            urlParametros = querySelectCRQValues.toString();
         
             OkHttpClient client = new OkHttpClient().newBuilder().build();
             Request request = new Request.Builder().url(urlRemedy + urlParametros).build();

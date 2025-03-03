@@ -19,7 +19,7 @@ public class CrotaloEntities {
     public final Logger log = Logger.getLogger(CrotaloEntities.class);
     public final Properties prop = PropertyLoader.load("crotalo2.properties");
 
-    public final String USUARIO_WS = prop.getProperty("CLIENTE_ARS");           //////////////////
+    public final String USUARIO_WS = prop.getProperty("CLIENTE_ARS");
 
     public final String FORM_AMX_SIT = prop.getProperty("FORM_AMS");
 //    public final String formCRQ = "&cForma=CHG:Infrastructure Change";//prop.getProperty("FORM_CHC");

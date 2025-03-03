@@ -10,11 +10,7 @@ import com.telcel.crotalo.utilities.WsRControl;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author iHector
- * @updated KC
- */
+
 public class CrotaloProcesos extends CrotaloEntities {
 
     public WsRControl WS_RC = new WsRControl();

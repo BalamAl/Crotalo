@@ -4,22 +4,9 @@ Radiomovil DIPSA S.A. de C.V. Todos los Derechos Reservados © 2017.
  */
 package com.telcel.crotalo;
 
-/**
- *
- * @author iHector
- */
 public class CrotaloEntityTASK {
 
-    /*
-    URL_INSERT += "'8'='" + RESUMEN_CR + "' " ;
-    URL_INSERT += "'10000101'='" + NOTAS_CR + "' " ;
-    URL_INSERT += "'200000012'='" + REGION_CR + "' " ;
-    URL_INSERT += "'10000001'='" + ID_CR + "' " ;
-    URL_INSERT += "'10000006'='" + ID_CR + "' " ;
-    URL_INSERT += "'536900039'='" + ID_NEMONICO_AMX.get(4) + "' " ;
-    URL_INSERT += "'1000000350'='" + FECHA_IN_CR + "' " ;
-    URL_INSERT += "'1000000362'='" + FECHA_FIN_CR + "'" ;
-     */
+
     public String resumenTASK;
     public String notasTASK;
     public String regionTASK;
